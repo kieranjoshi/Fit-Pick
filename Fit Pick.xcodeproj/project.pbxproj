@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		899A3FD62C7408B4001C6BA8 /* ClothingFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899A3FD52C7408B4001C6BA8 /* ClothingFormView.swift */; };
 		89AD79312B9AEA10002E0CE9 /* Fit_PickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD79302B9AEA10002E0CE9 /* Fit_PickApp.swift */; };
 		89AD79332B9AEA10002E0CE9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AD79322B9AEA10002E0CE9 /* ContentView.swift */; };
 		89AD79352B9AEA11002E0CE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89AD79342B9AEA11002E0CE9 /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		899A3FD52C7408B4001C6BA8 /* ClothingFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothingFormView.swift; sourceTree = "<group>"; };
 		89AD792D2B9AEA10002E0CE9 /* Fit Pick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fit Pick.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89AD79302B9AEA10002E0CE9 /* Fit_PickApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fit_PickApp.swift; sourceTree = "<group>"; };
 		89AD79322B9AEA10002E0CE9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 				89AD79302B9AEA10002E0CE9 /* Fit_PickApp.swift */,
 				89AD79322B9AEA10002E0CE9 /* ContentView.swift */,
 				89AD793E2B9AEBD3002E0CE9 /* GeneratorView.swift */,
+				899A3FD52C7408B4001C6BA8 /* ClothingFormView.swift */,
 				89AD79402B9AEC00002E0CE9 /* WardrobeView.swift */,
 				89AD79342B9AEA11002E0CE9 /* Assets.xcassets */,
 				89AD79362B9AEA11002E0CE9 /* Preview Content */,
@@ -143,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				899A3FD62C7408B4001C6BA8 /* ClothingFormView.swift in Sources */,
 				89AD793F2B9AEBD3002E0CE9 /* GeneratorView.swift in Sources */,
 				89AD79332B9AEA10002E0CE9 /* ContentView.swift in Sources */,
 				89AD79412B9AEC00002E0CE9 /* WardrobeView.swift in Sources */,
