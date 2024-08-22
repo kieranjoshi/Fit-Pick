@@ -8,19 +8,47 @@
 import SwiftUI
 import PhotosUI
 
+@MainActor
+final class PhotoPickerViewModel: ObservableObject {
+    
+    @Published private(set) var selectedImage: UIImage? = nil
+    @Published var imageSelection: PhotosPickerItem? = nil{
+        didSet{
+            setImage(from: imageSelection)
+        }
+    }
+    
+    private func setImage(from selection: PhotosPickerItem?) {
+        guard let selection else { return }
+        
+        Task {
+            if let data = try? await selection.loadTransferable(type: Data.self) {
+                if let uiImage = UIImage(data: data){
+                    selectedImage = uiImage
+                    return
+                }
+            }
+        }
+    }
+    
+    func removeImage() {
+        selectedImage = nil
+        imageSelection = nil
+    }
+
+}
+
 struct ClothingFormView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State private var name: String = ""
-    @State private var email: String = ""
-    @State private var clothingItem: PhotosPickerItem?
     @AppStorage("clothingType") private var clothingType: String = ""
     @State private var index = 0
+    @StateObject private var viewModel = PhotoPickerViewModel()
     var clothingOpetions = ["Shirt","Pants","Shoes","Accessory","Outerwear"]
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("Select a Photo")) {
-                    PhotosPicker(selection: $clothingItem, matching: .images){
+                    PhotosPicker(selection: $viewModel.imageSelection, matching: .images){
                         HStack{
                             Image(systemName: "photo")
                                 .resizable()
@@ -28,10 +56,24 @@ struct ClothingFormView: View {
                                 .frame(width: 30)
                             Text("Add an Image")
                         }.tint(.blue)
+                        
                     }
+                    if let image = viewModel.selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 200, height: 200,alignment: .center)
+                            .cornerRadius(10)
+                        Button(action: {
+                            viewModel.removeImage()
+                        }){
+                            Text("Remove Image")
+                        }
+                    }
+
                 }
                 Picker(selection: $index, label: Text("Clothing Type")) {
-                    ForEach(0 ..< clothingOpetions.count) {
+                    ForEach(0 ..< 5) {
                         Text(self.clothingOpetions[$0])
                     }
                 }
