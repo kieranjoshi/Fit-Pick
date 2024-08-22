@@ -12,6 +12,7 @@ import PhotosUI
 final class PhotoPickerViewModel: ObservableObject {
     
     @Published private(set) var selectedImage: UIImage? = nil
+    @Published var selectedImageData: Data? = nil
     @Published var imageSelection: PhotosPickerItem? = nil{
         didSet{
             setImage(from: imageSelection)
@@ -23,6 +24,7 @@ final class PhotoPickerViewModel: ObservableObject {
         
         Task {
             if let data = try? await selection.loadTransferable(type: Data.self) {
+                selectedImageData = data
                 if let uiImage = UIImage(data: data){
                     selectedImage = uiImage
                     return
@@ -33,6 +35,7 @@ final class PhotoPickerViewModel: ObservableObject {
     
     func removeImage() {
         selectedImage = nil
+        selectedImageData = nil
         imageSelection = nil
     }
 
@@ -41,7 +44,8 @@ final class PhotoPickerViewModel: ObservableObject {
 struct ClothingFormView: View {
     @Environment(\.presentationMode) var presentationMode
     @AppStorage("clothingType") private var clothingType: String = ""
-    @State private var index = 0
+    @State private var index: Int = -1
+    @State private var brand: String = ""
     @StateObject private var viewModel = PhotoPickerViewModel()
     var clothingOpetions = ["Shirt","Pants","Shoes","Accessory","Outerwear"]
     var body: some View {
@@ -49,32 +53,36 @@ struct ClothingFormView: View {
             Form {
                 Section(header: Text("Select a Photo")) {
                     PhotosPicker(selection: $viewModel.imageSelection, matching: .images){
-                        HStack{
-                            Image(systemName: "photo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30)
-                            Text("Add an Image")
-                        }.tint(.blue)
+                        Label("Add Image", systemImage: "photo")
+                            .foregroundStyle(.blue)
                         
                     }
+                    
                     if let image = viewModel.selectedImage {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFill()
                             .frame(width: 200, height: 200,alignment: .center)
                             .cornerRadius(10)
-                        Button(action: {
-                            viewModel.removeImage()
-                        }){
-                            Text("Remove Image")
+                        
+                        Button(role: .destructive){
+                            withAnimation{
+                                viewModel.removeImage()
+                            }
+                        } label: {
+                            Label("Remove Image", systemImage: "trash")
+                                .foregroundStyle(.red)
                         }
                     }
-
                 }
-                Picker(selection: $index, label: Text("Clothing Type")) {
-                    ForEach(0 ..< 5) {
-                        Text(self.clothingOpetions[$0])
+                Section(header: Text("Info")){
+                    
+                    TextField("Brand", text: $brand)
+                        .textInputAutocapitalization(.words)
+                    Picker(selection: $index, label: Text("Clothing Type")) {
+                        ForEach(0 ..< 5) {
+                            Text(self.clothingOpetions[$0])
+                        }
                     }
                 }
                 Section {
