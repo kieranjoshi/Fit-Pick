@@ -8,12 +8,33 @@
 import Foundation
 import SwiftData
 
-enum ClothingType: Int, Codable{
-    case Shirt
-    case Pants
-    case Shoes
-    case Accessory
-    case Outerwear
+enum ClothingType: Int, Codable, CaseIterable, Identifiable, Equatable {
+    case shirt
+    case pants
+    case shoes
+    case accessory
+    case outerwear
+    
+    var id: Int{
+        rawValue
+    }
+}
+
+extension ClothingType{
+    var title: String {
+        switch self{
+            case .shirt:
+                return "Shirt"
+            case .pants:
+                return "Pants"
+            case .shoes:
+                return "Shoes"
+            case .accessory:
+                return "Accessory"
+            case .outerwear:
+                return "Outerwear"
+        }
+    }
 }
 
 @Model
@@ -21,7 +42,7 @@ class ClothingItem: Identifiable {
     var image: Data
     var type: ClothingType
     var id: String
-    var brand: String?
+    var brand: String
     
     init(image: Data, type: ClothingType, brand: String = ""){
         self.image = image

@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
-
+import SwiftData
 @main
 struct Fit_PickApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .modelContainer(for:[ClothingItem.self])
         }
     }
 }

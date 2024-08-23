@@ -7,23 +7,36 @@
 
 import SwiftUI
 import PhotosUI
+import SwiftData
 
 struct WardrobeView: View {
     @State private var clothingItem: PhotosPickerItem?
     @State private var clothingItemData: Data?
     @State private var isFormPresented = false
+    @Query private var clothes: [ClothingItem] = []
     var body: some View {
         ZStack{
             VStack{
                 Text("Your Wardrobe")
                     .font(.largeTitle)
                     .bold()
+                
                 VStack{
                     Text("Shirts")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading,24)
                     ScrollView(.horizontal){
                         LazyHStack(alignment: .top, spacing: 10) {
+                            ForEach(clothes.filter { $0.type == .shirt}){ clothing in
+                                let clothingData = clothing.image
+                                if let uiImage = UIImage(data: clothingData){
+                                    Image(uiImage:uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(maxWidth: 90, maxHeight: 90)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                }
+                            }
                         }
                     }.fixedSize()
                     Text("Pants")
@@ -31,7 +44,16 @@ struct WardrobeView: View {
                         .padding(.leading,24)
                     ScrollView(.horizontal){
                         LazyHStack(alignment: .top, spacing: 10) {
-
+                            ForEach(clothes.filter { $0.type == .pants}){ clothing in
+                                let clothingData = clothing.image
+                                if let uiImage = UIImage(data: clothingData){
+                                    Image(uiImage:uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(maxWidth: 90, maxHeight: 90)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                }
+                            }
                         }
                     }.fixedSize()
                     Text("Shoes")
@@ -39,7 +61,16 @@ struct WardrobeView: View {
                         .padding(.leading,24)
                     ScrollView(.horizontal){
                         LazyHStack(alignment: .top, spacing: 10) {
-
+                            ForEach(clothes.filter { $0.type == .shoes}){ clothing in
+                                let clothingData = clothing.image
+                                if let uiImage = UIImage(data: clothingData){
+                                    Image(uiImage:uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(maxWidth: 90, maxHeight: 90)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                }
+                            }
                         }
                     }.fixedSize()
                     Text("Accessories")
@@ -47,7 +78,16 @@ struct WardrobeView: View {
                         .padding(.leading,24)
                     ScrollView(.horizontal){
                         LazyHStack(alignment: .top, spacing: 10) {
-
+                            ForEach(clothes.filter { $0.type == .accessory}){ clothing in
+                                let clothingData = clothing.image
+                                if let uiImage = UIImage(data: clothingData){
+                                    Image(uiImage:uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(maxWidth: 90, maxHeight: 90)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                }
+                            }
                         }
                     }.fixedSize()
                     Text("Outerwear")
@@ -55,20 +95,22 @@ struct WardrobeView: View {
                         .padding(.leading,24)
                     ScrollView(.horizontal){
                         LazyHStack(alignment: .top, spacing: 10) {
-
+                            ForEach(clothes.filter { $0.type == .outerwear}){ clothing in
+                                let clothingData = clothing.image
+                                if let uiImage = UIImage(data: clothingData){
+                                    Image(uiImage:uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(maxWidth: 90, maxHeight: 90)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                }
+                            }
                         }
                     }.fixedSize()
                     
                 }
-//                PhotosPicker(selection: $clothingItem, matching: .images){
-//                    HStack{
-//                        Image(systemName: "photo")
-//                            .resizable()
-//                            .scaledToFit()
-//                            .frame(width: 30)
-//                        Text("Add an Image")
-//                    }.tint(.blue)
-//                }
+                
+                Spacer()
                 Button(action: {
                     isFormPresented.toggle()
                 }) {
@@ -81,20 +123,9 @@ struct WardrobeView: View {
                 .sheet(isPresented: $isFormPresented) {
                     ClothingFormView()
                 }
-                
-                
+
+
             }
-//            .onChange(of: clothingItem){
-//                Task {
-//                    if let loaded = try? await clothingItem?.loadTransferable(type: Data.self){
-//                        clothingItemData = loaded
-//                    }
-//                    else{
-//                        print("Failed")
-//                    }
-//                }
-//            }
-            
         }
     }
     
@@ -110,8 +141,8 @@ struct WardrobeButton: ButtonStyle {
     }
 }
 
-struct WardrobeView_Previews: PreviewProvider {
-    static var previews: some View{
+#Preview {
         WardrobeView()
-    }
+            .modelContainer(for:[ClothingItem.self], inMemory: true)
 }
+

@@ -43,8 +43,8 @@ final class PhotoPickerViewModel: ObservableObject {
 
 struct ClothingFormView: View {
     @Environment(\.presentationMode) var presentationMode
-    @AppStorage("clothingType") private var clothingType: String = ""
-    @State private var index: Int = -1
+    @Environment(\.modelContext) private var context
+    @State private var selectedClothingType: ClothingType = .shirt
     @State private var brand: String = ""
     @StateObject private var viewModel = PhotoPickerViewModel()
     var clothingOpetions = ["Shirt","Pants","Shoes","Accessory","Outerwear"]
@@ -75,22 +75,35 @@ struct ClothingFormView: View {
                         }
                     }
                 }
-                Section(header: Text("Info")){
-                    
-                    TextField("Brand", text: $brand)
-                        .textInputAutocapitalization(.words)
-                    Picker(selection: $index, label: Text("Clothing Type")) {
-                        ForEach(0 ..< 5) {
-                            Text(self.clothingOpetions[$0])
+                
+                if viewModel.selectedImage != nil {
+                    Section(header: Text("Info")){
+                        TextField("Brand", text: $brand)
+                            .textInputAutocapitalization(.words)
+                        Picker(selection: $selectedClothingType, label: Text("Clothing Type")) {
+                            ForEach(ClothingType.allCases) { clothingtype in
+                                Text(clothingtype.title).tag(clothingtype)
+                            }
                         }
                     }
                 }
+    
                 Section {
-                    Button("Submit") {
-                        // Handle form submission here
-                        // After submission, dismiss the form
-                        presentationMode.wrappedValue.dismiss()
+                    if let data = viewModel.selectedImageData {
+                        Button("Submit") {
+                            // Handle form submission here
+                            // After submission, dismiss the form
+                            let item = ClothingItem(image: data, type: selectedClothingType, brand: brand)
+                            context.insert(item)
+                            presentationMode.wrappedValue.dismiss()
+                        }
                     }
+                    else{
+                        Button("Submit") {
+                            
+                        }.foregroundStyle(.gray)
+                    }
+                    
                 }
             }
             .navigationBarTitle("Add Clothing")
@@ -103,4 +116,5 @@ struct ClothingFormView: View {
 
 #Preview {
     ClothingFormView()
+        .modelContainer(for:[ClothingItem.self], inMemory: true)
 }

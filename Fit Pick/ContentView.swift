@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
-
+import SwiftData
 struct ContentView: View {
+    @Environment(\.modelContext) private var context
     var body: some View {
             TabView{
                 GeneratorView()
@@ -25,4 +26,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .modelContainer(for:[ClothingItem.self], inMemory: true)
 }
