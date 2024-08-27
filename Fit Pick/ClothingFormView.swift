@@ -42,12 +42,11 @@ final class PhotoPickerViewModel: ObservableObject {
 }
 
 struct ClothingFormView: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var context
     @State private var selectedClothingType: ClothingType = .shirt
     @State private var brand: String = ""
     @StateObject private var viewModel = PhotoPickerViewModel()
-    var clothingOpetions = ["Shirt","Pants","Shoes","Accessory","Outerwear"]
     var body: some View {
         NavigationView {
             Form {
@@ -91,11 +90,9 @@ struct ClothingFormView: View {
                 Section {
                     if let data = viewModel.selectedImageData {
                         Button("Submit") {
-                            // Handle form submission here
-                            // After submission, dismiss the form
                             let item = ClothingItem(image: data, type: selectedClothingType, brand: brand)
                             context.insert(item)
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         }
                     }
                     else{
@@ -108,7 +105,7 @@ struct ClothingFormView: View {
             }
             .navigationBarTitle("Add Clothing")
             .navigationBarItems(trailing: Button("Cancel") {
-                presentationMode.wrappedValue.dismiss()
+                dismiss()
             })
         }
     }
