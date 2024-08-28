@@ -53,7 +53,9 @@ struct WardrobeShelf: View {
     var title: String
     var clothingType: ClothingType
     var clothes: [ClothingItem]
+    @Environment(\.modelContext) private var context
     @State private var isUpdateFormPresented = false
+    @State private var showingConfirmation = false
     var body: some View {
         VStack(alignment: .leading) {
             Text(title)
@@ -65,20 +67,35 @@ struct WardrobeShelf: View {
                         if let uiImage = UIImage(data: clothing.image) {
 
                             Button(action: {
-                                isUpdateFormPresented.toggle()
+//                                isUpdateFormPresented.toggle()
+                                showingConfirmation.toggle()
                             }) {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 80, height: 80,alignment: .center)
                                     .cornerRadius(10)
-                            }.sheet(isPresented: $isUpdateFormPresented) {
+                            }.confirmationDialog("Select an option",isPresented: $showingConfirmation){
+                                Button(action: {
+                                    isUpdateFormPresented.toggle()
+                                }) {
+                                    Text("Update Item")
+                                }
+                                Button(action: {
+                                    context.delete(clothing)
+                                }) {
+                                    Text("Delete Item")
+                                        .tint(.red)
+                                }
+                            }
+.sheet(isPresented: $isUpdateFormPresented) {
                                 ItemUpdateView(clothing: clothing)
                             }
                         }
                     }
                 }
             }.fixedSize().padding(.leading, 14)
+                
         }
     }
 }
