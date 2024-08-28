@@ -20,25 +20,25 @@ struct ItemUpdateView: View {
         
         NavigationStack {
             Form {
-//                if let uiImage = viewModel.selectedImage{
-//                    Image(uiImage: uiImage)
-//                        .resizable()
-//                        .scaledToFill()
-//                        .frame(width: 200, height: 200,alignment: .center)
-//                        .cornerRadius(10)
-//                    
-//                }
-//                else if let uiImage = UIImage(data: clothing.image) {
-//                    Image(uiImage: uiImage)
-//                        .resizable()
-//                        .scaledToFill()
-//                        .frame(width: 200, height: 200,alignment: .center)
-//                        .cornerRadius(10)
-//                }
-//                PhotosPicker(selection: $viewModel.imageSelection, matching: .images){
-//                    Label("Update Image", systemImage: "photo")
-//                        .foregroundStyle(.blue)
-//                }
+                if let uiImage = viewModel.selectedImage{
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 200, height: 200,alignment: .center)
+                        .cornerRadius(10)
+                    
+                }
+                else if let uiImage = UIImage(data: clothing.image) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 200, height: 200,alignment: .center)
+                        .cornerRadius(10)
+                }
+                PhotosPicker(selection: $viewModel.imageSelection, matching: .images){
+                    Label("Update Image", systemImage: "photo")
+                        .foregroundStyle(.blue)
+                }
                 Section(header: Text("Info")){
                     TextField("Updated Brand", text: $tempBrand)
                             .textInputAutocapitalization(.words)
@@ -53,6 +53,9 @@ struct ItemUpdateView: View {
                     Button("Update"){
                         clothing.brand = tempBrand
                         clothing.type = tempType
+                        if let data = viewModel.selectedImageData{
+                            clothing.image = data
+                        }
                         dismiss()
                     }
                 }
@@ -63,6 +66,8 @@ struct ItemUpdateView: View {
                 .onAppear {
                     tempBrand = clothing.brand
                     tempType = clothing.type
+                    viewModel.selectedImageData = clothing.image
+                    
                 }
         }
     }
